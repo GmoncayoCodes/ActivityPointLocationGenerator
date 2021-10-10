@@ -264,7 +264,7 @@ try:
                 dfTmp= dfFinal.rename(columns = {'datetime': 'timestamp'})
                 dfTmp = dfTmp.sort_index()
                 arrayWeeks = dfTmp.idWeek.unique()    
-                dfStopClusterSummary = pd.DataFrame(columns=['idFile', 'idWeek', 'numWeek', 'idTrip', 'APL', 'clusters'])
+                dfStopClusterSummary = pd.DataFrame(columns=['idFile', 'idWeek', 'numWeek', 'idTrip', 'APLs', 'clusters'])
                 for numWeek in arrayWeeks:
                     dfConsolidado = dfTmp[dfTmp['idWeek'] == numWeek]
                     arrayTrips = dfConsolidado.idTrip.unique()
@@ -277,7 +277,7 @@ try:
                         tripIdTrip = dfEachTrip.loc[0]['idTrip']
                         apls = dfEachTrip['idTrip'].count()
                         clus = dfEachTrip['cluster'].nunique()
-                        aplSerie = {'idFile':tripFile, 'idWeek':tripIdWeek, 'numWeek':tripNumWeek, 'idTrip':tripIdTrip, 'APL':apls, 'clusters':clus}
+                        aplSerie = {'idFile':tripFile, 'idWeek':tripIdWeek, 'numWeek':tripNumWeek, 'idTrip':tripIdTrip, 'APLs':apls, 'clusters':clus}
                         dfStopClusterSummary = dfStopClusterSummary.append(aplSerie,ignore_index=True) 
                 
                 #Join Summary Data
@@ -287,18 +287,18 @@ try:
                 # Export Data before Anonymisation
                 # =============================================================================
                 dfFinal = dfFinal.rename(columns = {'uid': 'idFile', 'lng':'lon'})
-                dfFinal = dfFinal[['idFile', 'idWeek', 'datetime','lat', 'lon', 'cluster']]
+                dfFinal = dfFinal[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon', 'cluster']]
                 exportFile = 'APLData_'
                 dfFinal.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                 dfFinal.to_pickle(urlDataFinal + exportFile + '.dat')
                 
                 dfTrajTrips = dfTrajTrips.rename(columns = {'uid': 'idFile', 'timestamp':'datetime', 'lng':'lon'})
-                dfTrajTrips = dfTrajTrips[['idFile', 'idWeek', 'datetime','lat', 'lon', 'idTrip']]
+                dfTrajTrips = dfTrajTrips[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon']]
                 exportFile = 'TrajectoryTripsData_'
                 dfTrajTrips.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                 dfTrajTrips.to_pickle(urlDataFinal + exportFile + '.dat')
                 
-                dfFinalSummary = dfFinalSummary[['idFile', 'idWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'APL', 'clusters']]
+                dfFinalSummary = dfFinalSummary[['idFile', 'idWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'APLs', 'clusters']]
                 exportFile = 'TrajectoryTripsSummaryData_'
                 dfFinalSummary.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                 dfFinalSummary.to_pickle(urlDataFinal + exportFile + '.dat')
