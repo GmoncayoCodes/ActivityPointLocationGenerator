@@ -34,6 +34,12 @@ Pre-requisites in case you want to run the script separately:
    4. Set `code` as your working directory
    5. Run script
 
+A sample of anonymised APL data is [here](doi.org/10.6084/m9.figshare.16727014.v1)
+
+To cite this project use:
+Moncayo-Unda, Milton Giovanny (2021): Activity Point Location Data. figshare. Dataset. https://doi.org/10.6084/m9.figshare.16727014.v1 
+
+
 Having trouble with code? Check the [paper documentation](https://docs.github.com/categories/github-pages-basics/) or [contact](mailto:mmoncayo@uce.edu.ec). I’ll help you sort it out.
 
 
