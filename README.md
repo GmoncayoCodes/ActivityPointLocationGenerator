@@ -34,7 +34,7 @@ Pre-requisites in case you want to run the script separately:
    4. Set `code` as your working directory
    5. Run script
 
-Having trouble with code? Check the [paper documentation](https://docs.github.com/categories/github-pages-basics/) or [contact](mmoncayo@uce.edu.ec). I’ll help you sort it out.
+Having trouble with code? Check the [paper documentation](https://docs.github.com/categories/github-pages-basics/) or [contact](mailto:mmoncayo@uce.edu.ec). I’ll help you sort it out.
 
 
 
