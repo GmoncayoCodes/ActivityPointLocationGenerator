@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Welcome to Activity Point Location (APL) Project
 
 You can use the [editor on GitHub](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
