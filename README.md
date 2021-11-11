@@ -14,8 +14,7 @@ Request your GLH JSON data from Google via [Google Takeout](https://takeout.goog
 # =============================================================================
 # DATA TRANSFORMATION SCRIPT
 # Script to transform Google Location History (GLH) JSON files into CSV files
-# Clone the code from Github 
-# git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git
+# Clone the code from Github [here](git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git)
 #
 # Pre-requisites to run the script:
 #   1. Check or create folders in your python directory: code, dataJSON
