@@ -10,19 +10,15 @@ Request your GLH JSON data from Google via [Google Takeout](https://takeout.goog
 
 ## JSON Transformation
 
-```markdown
-# =============================================================================
-# DATA TRANSFORMATION SCRIPT
-# Script to transform Google Location History (GLH) JSON files into CSV files
-# Clone the code from Github [here](git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git)
-#
-# Pre-requisites to run the script:
-#   1. Check or create folders in your python directory: code, dataJSON
-#   2. Copy scripts 01JSON-Transformation.py and 02APL-Processing.py in the code directory
-#   3. Copy GLH JSON file in the dataJSON directory 
-#   4. Set the folder code as your working directory
-#   5. Run script
-# =============================================================================
+Script to transform Google Location History (GLH) JSON files into CSV files
+Clone the code from Github [here](git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git)
+
+Pre-requisites to run the script:
+   1. Check or create folders in your python directory: code, dataJSON
+   2. Copy scripts [01JSON-Transformation.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/01JSON-Transformation.py) and [02APL-Processing.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/02APL-Processing.py) in the code directory
+   3. Copy GLH JSON file in the dataJSON directory 
+   4. Set the folder code as your working directory
+   5. Run script
 
 
 ## APL Processing
