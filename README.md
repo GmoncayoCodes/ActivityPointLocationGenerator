@@ -8,7 +8,7 @@ Stages to process your data:
 
 ## Data Source
 
-Request your GLH JSON data from Google via [Google Takeout](https://takeout.google.com/)
+Request your GLH JSON file from Google via [Google Takeout](https://takeout.google.com/)
 
 
 ## JSON Transformation
