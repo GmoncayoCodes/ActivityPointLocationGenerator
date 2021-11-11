@@ -4,7 +4,7 @@ GPS data collection using mobile devices is of particular interest. This data pr
 
 This project contain scripts to compute Activity Point Location (APL) from mobile devices' GPS tracking. We use Google Location History (GLH), which is accessible on the Google Maps application through the “Your Timeline” option to get GPS tracking data. GLH is available on all mobile devices around the world with the Google Maps application installed. 
 
-## Stages to process your data:
+## Stages to process the data:
 
 ### - Data Source
 
