@@ -1,6 +1,8 @@
 # Welcome to Activity Point Location (APL) Project
 
-GPS data collection using mobile devices is of particular interest. This data provides detailed information on people's daily movements due to devices' ubiquity and daily use. This project contain scripts to compute Activity Point Location (APL) from mobile devices' GPS tracking. We use Google Location History (GLH), which is accessible on the Google Maps application through the “Your Timeline” option to get GPS tracking data. GLH is available on all mobile devices around the world with the Google Maps application installed. 
+GPS data collection using mobile devices is of particular interest. This data provides detailed information on people's daily movements due to devices' ubiquity and daily use. 
+
+This project contain scripts to compute Activity Point Location (APL) from mobile devices' GPS tracking. We use Google Location History (GLH), which is accessible on the Google Maps application through the “Your Timeline” option to get GPS tracking data. GLH is available on all mobile devices around the world with the Google Maps application installed. 
 
 Stages to process your data:
 
