@@ -3,7 +3,7 @@
 @author: Giovanny Moncayo
 """
 # =============================================================================
-# PROCESSING STAGE SCRIPT
+# DATA PROCESSING SCRIPT
 # Script to compute Activity Point Locations (APL)
 # Clone the code from Github 
 # git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git 
@@ -38,7 +38,7 @@ from skmob.preprocessing import clustering as skm_clustering
 # UTILITY PACKAGE IMPORTS
 # =============================================================================
 import datetime as dt
-import os, platform, logging, sys
+import logging, os, platform, sys
 
 # =============================================================================
 # # CONSTANTS DEFINITION

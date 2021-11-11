@@ -3,7 +3,7 @@
 @author: Giovanny Moncayo
 """
 # =============================================================================
-# TRANSFORMATION STAGE SCRIPT
+# DATA TRANSFORMATION SCRIPT
 # Script to transform Google Location History (GLH) JSON files into CSV files
 # Clone the code from Github 
 # git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git
@@ -28,8 +28,9 @@ import pandas as pd
 # =============================================================================
 # UTILITY PACKAGE IMPORTS
 # =============================================================================
-import os, platform, logging, json, sys
 import datetime as dt
+import json, logging, os, platform, sys
+
 
 try:
     # Get Working Directory
