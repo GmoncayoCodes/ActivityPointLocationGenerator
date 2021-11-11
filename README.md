@@ -32,10 +32,10 @@ Pre-requisites in case you want to run the script separately:
    4. Set `code` as your working directory
    5. Run script
 
-## How to cite this project
+### How to cite this project
 
 Moncayo-Unda, Milton Giovanny (2021): Activity Point Location Data. figshare. Dataset. https://doi.org/10.6084/m9.figshare.16727014.v1 
 
-## Having trouble?
+### Having trouble?
 
 Check the [paper documentation](https://docs.github.com/categories/github-pages-basics/) or [contact](mailto:mmoncayo@uce.edu.ec). I’ll help you sort it out.
