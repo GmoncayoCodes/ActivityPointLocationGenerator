@@ -8,6 +8,7 @@ Stages to process your data:
 
 Request your GLH JSON data from Google via [Google Takeout](https://takeout.google.com/)
 
+
 ## JSON Transformation
 
 Script to transform Google Location History (GLH) JSON files into CSV files
@@ -22,6 +23,20 @@ Pre-requisites to run the script:
 
 
 ## APL Processing
+
+Script to compute Activity Point Locations (APL). This script is automatically executed from script [01JSON-Transformation.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/01JSON-Transformation.py)
+Clone the code from Github [here](git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git)
+
+Pre-requisites in case you want to run the script separately: 
+   1. Check or create folders in your python directory: code, dataTransform, dataFinal, log 
+   2. Copy script [02APL-Processing.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/02APL-Processing.py) in the code directory
+   3. Copy CSV file in the dataTransform directory
+   4. Set the folder code as your working directory
+   5. Run script
+
+
+
+
 
 
 You can use the [editor on GitHub](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
