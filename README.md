@@ -6,11 +6,11 @@ This project contain scripts to compute Activity Point Location (APL) from mobil
 
 ## Stages to process your data:
 
-### Data Source
+### - Data Source
 
 Request your GLH JSON file from Google via [Google Takeout](https://takeout.google.com/)
 
-### JSON Transformation
+### - JSON Transformation
 
 Run the script to transform Google Location History (GLH) JSON files into CSV files
 
@@ -21,7 +21,7 @@ Pre-requisites to run the script:
    4. Set `code` as your working directory
    5. Run script
 
-### APL Processing
+### - APL Processing
 
 Run the script to compute Activity Point Locations (APL). This script is automatically executed from script [01JSON-Transformation.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/01JSON-Transformation.py)
 
