@@ -34,7 +34,7 @@ Pre-requisites in case you want to run the script separately:
 
 ## How to cite this project
 
-Moncayo-Unda, Milton Giovanny (2021): Activity Point Location Data. figshare. Dataset. https://doi.org/10.6084/m9.figshare.16727014.v1 
+Moncayo-Unda, Milton Giovanny (2021): Activity Point Location Data. figshare. Dataset. (https://doi.org/10.6084/m9.figshare.16727014.v1) 
 
 ## Having trouble?
 
