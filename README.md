@@ -10,7 +10,6 @@ Stages to process your data:
 
 Request your GLH JSON file from Google via [Google Takeout](https://takeout.google.com/)
 
-
 ## JSON Transformation
 
 Script to transform Google Location History (GLH) JSON files into CSV files
@@ -21,7 +20,6 @@ Pre-requisites to run the script:
    3. Copy GLH JSON file in the `dataJSON` directory 
    4. Set `code` as your working directory
    5. Run script
-
 
 ## APL Processing
 
@@ -34,53 +32,10 @@ Pre-requisites in case you want to run the script separately:
    4. Set `code` as your working directory
    5. Run script
 
-To cite this project use:
+## How to cite this project
 
 Moncayo-Unda, Milton Giovanny (2021): Activity Point Location Data. figshare. Dataset. https://doi.org/10.6084/m9.figshare.16727014.v1 
 
+## Having trouble?
 
-Having trouble? Check the [paper documentation](https://docs.github.com/categories/github-pages-basics/) or [contact](mailto:mmoncayo@uce.edu.ec). I’ll help you sort it out.
-
-
-
-
-
-
-
-
-
-You can use the [editor on GitHub](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Check the [paper documentation](https://docs.github.com/categories/github-pages-basics/) or [contact](mailto:mmoncayo@uce.edu.ec). I’ll help you sort it out.
