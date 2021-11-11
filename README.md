@@ -4,12 +4,29 @@ GPS data collection using mobile devices is of particular interest. This data pr
 
 Stages to process your data:
 
-## Data collection
+## Data Source
 
-Request your GLH data from Google via [Google Takeout](https://takeout.google.com/)
+Request your GLH JSON data from Google via [Google Takeout](https://takeout.google.com/)
+
+## JSON Transformation
+
+```markdown
+# =============================================================================
+# DATA TRANSFORMATION SCRIPT
+# Script to transform Google Location History (GLH) JSON files into CSV files
+# Clone the code from Github 
+# git@github.com:GmoncayoCodes/ActivityPointLocationGenerator.git
+#
+# Pre-requisites to run the script:
+#   1. Check or create folders in your python directory: code, dataJSON
+#   2. Copy scripts 01JSON-Transformation.py and 02APL-Processing.py in the code directory
+#   3. Copy GLH JSON file in the dataJSON directory 
+#   4. Set the folder code as your working directory
+#   5. Run script
+# =============================================================================
 
 
-
+## APL Processing
 
 
 You can use the [editor on GitHub](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
