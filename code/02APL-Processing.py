@@ -27,6 +27,7 @@ get_ipython().magic('reset -sf')
 import pandas as pd
 import geopandas as gpd
 import movingpandas as mpd
+import numpy as np
 import skmob as skm
 from skmob.preprocessing import filtering as skm_filter
 from skmob.preprocessing import compression as skm_compression
@@ -135,7 +136,8 @@ try:
                         if(('datetime' in dfSource.columns) and ('latitude' in dfSource.columns) and ('longitude' in dfSource.columns)):
                             df = dfSource
                             df['idFile'] = idFile
-                            df = df[['idFile','datetime', 'latitude', 'longitude']]
+                            df['covidStatus'] = np.where(df.datetime < '2020-03-01', 0, 1)
+                            df = df[['idFile','datetime', 'latitude', 'longitude','covidStatus']]
                             msg = "Source Dataset contains {} records ".format(len(df))
                             print(msg)
                             logging.info(msg)
@@ -206,7 +208,7 @@ try:
                                 arrayWeeks = dfTrajTrips.idWeek.unique()
                                 
                                 #Trips Summary
-                                dfTrajTripsSummary = pd.DataFrame(columns=['idFile', 'idWeek', 'numWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints'])
+                                dfTrajTripsSummary = pd.DataFrame(columns=['idFile', 'idWeek', 'numWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'covidStatus'])
                                 for numWeek in arrayWeeks:
                                     dfConsolidado = dfTrajTrips[dfTrajTrips['idWeek'] == numWeek]
                                     arrayTrips = dfConsolidado.idTrip.unique()
@@ -225,7 +227,8 @@ try:
                                         tripTimeMin = dfEachTrip['delta_t_m'].sum()
                                         tripLenKm = dfEachTripLen.at[0,'distance_straight_line']
                                         gpsPoints = dfEachTrip['idTrip'].count()
-                                        tripSerie = {'idFile':tripFile, 'idWeek':tripIdWeek, 'numWeek':tripNumWeek, 'idTrip':tripIdTrip, 'tripTimeMin':tripTimeMin, 'tripLenKm':tripLenKm, 'GPSPoints':gpsPoints}
+                                        covidStatus = dfEachTrip.at[0,'covidStatus']
+                                        tripSerie = {'idFile':tripFile, 'idWeek':tripIdWeek, 'numWeek':tripNumWeek, 'idTrip':tripIdTrip, 'tripTimeMin':tripTimeMin, 'tripLenKm':tripLenKm, 'GPSPoints':gpsPoints, 'covidStatus':covidStatus}
                                         dfTrajTripsSummary = dfTrajTripsSummary.append(tripSerie,ignore_index=True) 
                                 
                                 # =============================================================================
@@ -299,16 +302,16 @@ try:
                                 # Export Data before Anonymisation
                                 # =============================================================================
                                 dfFinal = dfFinal.rename(columns = {'uid': 'idFile', 'lng':'lon'})
-                                dfFinal = dfFinal[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon', 'cluster']]
+                                dfFinal = dfFinal[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon', 'cluster', 'covidStatus']]
                                 exportFile = 'APLData_'
                                 dfFinal.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                                 
                                 dfTrajTrips = dfTrajTrips.rename(columns = {'uid': 'idFile', 'timestamp':'datetime', 'lng':'lon'})
-                                dfTrajTrips = dfTrajTrips[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon']]
+                                dfTrajTrips = dfTrajTrips[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon', 'covidStatus']]
                                 exportFile = 'TrajectoryTripsData_'
                                 dfTrajTrips.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                                 
-                                dfFinalSummary = dfFinalSummary[['idFile', 'idWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'APLs', 'clusters']]
+                                dfFinalSummary = dfFinalSummary[['idFile', 'idWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'APLs', 'clusters', 'covidStatus']]
                                 exportFile = 'TrajectoryTripsSummaryData_'
                                 dfFinalSummary.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                                 
