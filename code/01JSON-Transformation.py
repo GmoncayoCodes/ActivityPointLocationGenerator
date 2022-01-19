@@ -158,7 +158,7 @@ try:
             logging.shutdown()  
             
             # Excecute processing stage
-            exec(open("02APL-Processing.py").read())
+            exec(open("02AnLoCOV-Processing.py").read())
             
         except:
             msg = '{}: {}'.format(sys.exc_info()[0], sys.exc_info()[1])
