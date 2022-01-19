@@ -143,7 +143,7 @@ try:
                             msg = 'No columns timestampMs, latitudeE7 or longitudeE7 in JSON File'
                             raise RuntimeError(msg)
                     else:
-                        msg = 'Empty JSON file'
+                        msg = 'Empty JSON file. Replace test.json in dataJSON directory'
                         raise RuntimeError(msg)
                 else:
                     msg = 'Wrong JSON file extension ({})'.format(jsonFileName)
