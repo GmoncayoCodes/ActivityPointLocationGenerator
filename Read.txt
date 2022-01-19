@@ -1,1 +1,1 @@
-Copy in your JSON file in dataJSON folder
+Copy your Google Location History JSON file in dataJSON folder (Replace test.json)
