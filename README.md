@@ -16,7 +16,7 @@ Run the script to transform Google Location History (GLH) JSON files into CSV fi
 
 Pre-requisites to run the script:
    1. Check or create folders in your python directory: `code`, `dataJSON`
-   2. Copy scripts [01JSON-Transformation.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/01JSON-Transformation.py) and [02APL-Processing.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/02APL-Processing.py) in the code directory
+   2. Copy scripts [01JSON-Transformation.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/01JSON-Transformation.py) and [02AnLoCOV-Processing.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/02AnLoCOV-Processing.py) in the code directory
    3. Copy GLH JSON file in the `dataJSON` directory (Replace test.json) 
    4. Set `code` as your working directory
    5. Run script
@@ -27,7 +27,7 @@ Run the script to compute AnLoCOV dataset. This script is automatically executed
 
 Pre-requisites in case you want to run the script separately: 
    1. Check or create folders in your python directory: `code`, `dataTransform`, `dataFinal`, `log` 
-   2. Copy script [02APL-Processing.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/02APL-Processing.py) in the code directory
+   2. Copy script [02AnLoCOV-Processing.py](https://github.com/GmoncayoCodes/ActivityPointLocationGenerator/blob/main/code/02AnLoCOV-Processing.py) in the code directory
    3. Copy CSV file in the `dataTransform` directory
    4. Set `code` as your working directory
    5. Run script
