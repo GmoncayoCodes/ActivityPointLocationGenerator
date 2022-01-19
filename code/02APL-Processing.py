@@ -47,6 +47,29 @@ import logging, os, platform, sys
 # Minimum number observations to process APL computation
 MIN_NUMBER_OBSERVATIONS = 100
 
+# Data zone limits (Ecuador)
+TOP_LAT =  1.426548
+LOW_LAT = -5.012636
+LEFT_LON = -81.011268
+RIGHT_LON = -75.199536
+
+# COVID start date
+COVID_DATE = '2020-03-01'
+
+# COVID Restriction Levels 
+# First Period - Full Restrictions(Level 3)
+CRL_P1_START = '2020-03-01'
+CRL_P1_END = '2020-06-01'
+# Second Period - Middle restrictions(Level 2)
+CRL_P2_START = '2020-06-01'
+CRL_P2_END = '2020-07-01'
+# Third Period - Low restrictions(Level 1)
+CRL_P3_START = '2020-07-01'
+CRL_P3_END = '2020-12-01'
+# Fourth Period - Middle restrictions(Level 2)
+CRL_P4_START = '2020-12-01'
+CRL_P4_END = '2021-06-01'
+
 # Filter (scikit-mobility)
 # Filter out the trajectory points that are considered noise or outliers
 # Delete a trajectory point if the speed (in km/h) from the previous point is higher than MAX_SPEED_KMH
@@ -82,7 +105,6 @@ MIN_SPATIAL_RADIUS_KM_STOP = 1 #1*1 = 1 km
 # The clustering algorithm used is DBSCAN
 MIN_SAMPLES_CLUSTER=1
 MIN_CLUSTER_RADIUS_KM = 0.05 #50 meters
-
 
 # =============================================================================
 # Algorithm to compute APL
@@ -135,9 +157,17 @@ try:
                         # Validate columns datetime, latitude and longitude exists in CSV structure
                         if(('datetime' in dfSource.columns) and ('latitude' in dfSource.columns) and ('longitude' in dfSource.columns)):
                             df = dfSource
+                            # Zone filter
+                            df = df[df.latitude.between(LOW_LAT, TOP_LAT)]
+                            df = df[df.longitude.between(LEFT_LON, RIGHT_LON)]
                             df['idFile'] = idFile
-                            df['covidStatus'] = np.where(df.datetime < '2020-03-01', 0, 1)
-                            df = df[['idFile','datetime', 'latitude', 'longitude','covidStatus']]
+                            df['covidStatus'] = np.where(df.datetime < COVID_DATE, 0, 1)
+                            df['restrictionLevel'] = np.where(df.datetime < COVID_DATE, 0, 
+                                   (np.where(df.datetime.between(CRL_P1_START, CRL_P1_END),3,
+                                             np.where(df.datetime.between(CRL_P2_START, CRL_P2_END),2,
+                                                      np.where(df.datetime.between(CRL_P3_START, CRL_P3_END),1,
+                                                               np.where(df.datetime.between(CRL_P4_START, CRL_P4_END),2,1))))))
+                            df = df[['idFile','datetime', 'latitude', 'longitude','covidStatus','restrictionLevel']]
                             msg = "Source Dataset contains {} records ".format(len(df))
                             print(msg)
                             logging.info(msg)
@@ -158,6 +188,35 @@ try:
                                 # the time of the initial point. - 50m 
                                 # =============================================================================
                                 dfSkmob = skm_compression.compress(dfSkmob, spatial_radius_km=MIN_SPATIAL_RADIUS_KM)
+                                
+                                # =============================================================================
+                                # FIRST DATASET GPSTrackingData
+                                # =============================================================================
+                                dfGPSTracking = dfSkmob
+                                dfGPSTracking = dfGPSTracking.rename(columns = {'uid': 'idFile', 'lng': 'lon'})
+                                dfGPSTracking = dfGPSTracking[['idFile','datetime', 'lat', 'lon','covidStatus','restrictionLevel']]
+                                # =============================================================================
+                                # Export Data before Anonymisation
+                                # ============================================================================= 
+                                exportFile = 'GPSTrackingData_'
+                                dfGPSTracking.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
+                                # =============================================================================
+                                # GRAVITY ANONYMISATION
+                                # Data Anonymisation is based on Gravity Point
+                                # Gravity point (GP) is the mean latitute and longitude of all dataset
+                                # Anonimyzation consist to move GP to the center of the world (0,0)
+                                # =============================================================================
+                                # Gravity point
+                                lonGravityPointAnonymization = dfGPSTracking['lon'].mean()
+                                latGravityPointAnonymization = dfGPSTracking['lat'].mean()
+                                # Anonymise Data
+                                dfGPSTracking['lon'] = dfGPSTracking['lon'] - lonGravityPointAnonymization
+                                dfGPSTracking['lat'] = dfGPSTracking['lat'] - latGravityPointAnonymization
+                                # =============================================================================
+                                # Export Data after Anonymisation
+                                # =============================================================================
+                                exportFile = 'GPSTrackingData'
+                                dfGPSTracking.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                                 
                                 # =============================================================================
                                 # TRAJECTORIES
@@ -204,32 +263,7 @@ try:
                                         dfTripTotal = dfTripTotal.append(dfTripDf)
                                     dfTrajTrips = dfTrajTrips.append(dfTripTotal)
                                 
-                                dfTrajTrips = dfTrajTrips.sort_index()   
-                                arrayWeeks = dfTrajTrips.idWeek.unique()
-                                
-                                #Trips Summary
-                                dfTrajTripsSummary = pd.DataFrame(columns=['idFile', 'idWeek', 'numWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'covidStatus'])
-                                for numWeek in arrayWeeks:
-                                    dfConsolidado = dfTrajTrips[dfTrajTrips['idWeek'] == numWeek]
-                                    arrayTrips = dfConsolidado.idTrip.unique()
-                                    for numTrip in arrayTrips:
-                                        dfEachTrip = dfConsolidado[dfConsolidado['idTrip'] == numTrip]
-                                        t = dfEachTrip.reset_index().t
-                                        dfEachTrip = dfEachTrip.assign(delta_t=t.diff().values)
-                                        dfEachTrip['delta_t_m'] = dfEachTrip['delta_t'].dt.total_seconds()/60
-                                        dfEachTripTmp = skm.TrajDataFrame(dfEachTrip, latitude='lat', longitude='lng', datetime='timestamp', user_id='uid')
-                                        dfEachTripLen = skm_distance(dfEachTripTmp, show_progress=False)
-                                        dfEachTrip=dfEachTrip.reset_index()
-                                        tripFile = dfEachTrip.at[0,'uid']
-                                        tripIdWeek = dfEachTrip.loc[0]['idWeek']
-                                        tripNumWeek = dfEachTrip.loc[0]['numWeek']
-                                        tripIdTrip = dfEachTrip.loc[0]['idTrip']
-                                        tripTimeMin = dfEachTrip['delta_t_m'].sum()
-                                        tripLenKm = dfEachTripLen.at[0,'distance_straight_line']
-                                        gpsPoints = dfEachTrip['idTrip'].count()
-                                        covidStatus = dfEachTrip.at[0,'covidStatus']
-                                        tripSerie = {'idFile':tripFile, 'idWeek':tripIdWeek, 'numWeek':tripNumWeek, 'idTrip':tripIdTrip, 'tripTimeMin':tripTimeMin, 'tripLenKm':tripLenKm, 'GPSPoints':gpsPoints, 'covidStatus':covidStatus}
-                                        dfTrajTripsSummary = dfTrajTripsSummary.append(tripSerie,ignore_index=True) 
+                                dfTrajTrips = dfTrajTrips.sort_index()
                                 
                                 # =============================================================================
                                 # ACTIVITY POINT LOCATIONS
@@ -240,6 +274,7 @@ try:
                                 # within the specified distance
                                 # =============================================================================
                                 dfTrajTripsStops = pd.DataFrame()
+                                arrayWeeks = dfTrajTrips.idWeek.unique()
                                 for numWeek in arrayWeeks:
                                   dfTrajTripsWeek = dfTrajTrips[dfTrajTrips['idWeek'] == numWeek]
                                   arrayTrips = dfTrajTripsWeek.idTrip.unique()
@@ -273,10 +308,16 @@ try:
                                     print(msg)
                                     logging.warning(msg)    
                                 
-                                dfFinal = dfTrajTripsStopsClusters
+                                # =============================================================================
+                                # SECOND DATASET APLData
+                                # =============================================================================
+                                dfAPL = dfTrajTripsStopsClusters
                                 
-                                #Stops and Cluster Summary
-                                dfTmp= dfFinal.rename(columns = {'datetime': 'timestamp'})
+                                # =============================================================================
+                                # THIRD DATASET SummaryData
+                                # =============================================================================
+                                # Stops and Cluster Summary
+                                dfTmp = dfAPL.rename(columns = {'datetime': 'timestamp'})
                                 dfTmp = dfTmp.sort_index()
                                 arrayWeeks = dfTmp.idWeek.unique()    
                                 dfStopClusterSummary = pd.DataFrame(columns=['idFile', 'idWeek', 'numWeek', 'idTrip', 'APLs', 'clusters'])
@@ -295,55 +336,67 @@ try:
                                         aplSerie = {'idFile':tripFile, 'idWeek':tripIdWeek, 'numWeek':tripNumWeek, 'idTrip':tripIdTrip, 'APLs':apls, 'clusters':clus}
                                         dfStopClusterSummary = dfStopClusterSummary.append(aplSerie,ignore_index=True) 
                                 
-                                #Join Summary Data
-                                dfFinalSummary = pd.merge(dfTrajTripsSummary, dfStopClusterSummary, on=['idFile','idWeek','numWeek','idTrip'], how='outer')
+                                # Trips Summary
+                                dfTrajTripsSummary = pd.DataFrame(columns=['idFile', 'idWeek', 'numWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'covidStatus', 'restrictionLevel'])
+                                arrayWeeks = dfTrajTrips.idWeek.unique()
+                                for numWeek in arrayWeeks:
+                                    dfConsolidado = dfTrajTrips[dfTrajTrips['idWeek'] == numWeek]
+                                    arrayTrips = dfConsolidado.idTrip.unique()
+                                    for numTrip in arrayTrips:
+                                        dfEachTrip = dfConsolidado[dfConsolidado['idTrip'] == numTrip]
+                                        t = dfEachTrip.reset_index().t
+                                        dfEachTrip = dfEachTrip.assign(delta_t=t.diff().values)
+                                        dfEachTrip['delta_t_m'] = dfEachTrip['delta_t'].dt.total_seconds()/60
+                                        dfEachTripTmp = skm.TrajDataFrame(dfEachTrip, latitude='lat', longitude='lng', datetime='timestamp', user_id='uid')
+                                        dfEachTripLen = skm_distance(dfEachTripTmp, show_progress=False)
+                                        dfEachTrip=dfEachTrip.reset_index()
+                                        tripFile = dfEachTrip.at[0,'uid']
+                                        tripIdWeek = dfEachTrip.loc[0]['idWeek']
+                                        tripNumWeek = dfEachTrip.loc[0]['numWeek']
+                                        tripIdTrip = dfEachTrip.loc[0]['idTrip']
+                                        tripTimeMin = dfEachTrip['delta_t_m'].sum()
+                                        tripLenKm = dfEachTripLen.at[0,'distance_straight_line']
+                                        gpsPoints = dfEachTrip['idTrip'].count()
+                                        covidStatus = dfEachTrip.at[0,'covidStatus']
+                                        restrictionLevel = dfEachTrip.at[0,'restrictionLevel']
+                                        tripSerie = {'idFile':tripFile, 'idWeek':tripIdWeek, 'numWeek':tripNumWeek, 'idTrip':tripIdTrip, 'tripTimeMin':tripTimeMin, 'tripLenKm':tripLenKm, 'GPSPoints':gpsPoints, 'covidStatus':covidStatus, 'restrictionLevel':restrictionLevel}
+                                        dfTrajTripsSummary = dfTrajTripsSummary.append(tripSerie,ignore_index=True) 
+                                
+                                # Join Summary Data
+                                dfSummary = pd.merge(dfTrajTripsSummary, dfStopClusterSummary, on=['idFile','idWeek','numWeek','idTrip'], how='outer')
                                 
                                 # =============================================================================
                                 # Export Data before Anonymisation
                                 # =============================================================================
-                                dfFinal = dfFinal.rename(columns = {'uid': 'idFile', 'lng':'lon'})
-                                dfFinal = dfFinal[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon', 'cluster', 'covidStatus']]
+                                dfAPL = dfAPL.rename(columns = {'uid': 'idFile', 'lng':'lon'})
+                                dfAPL = dfAPL[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon', 'cluster', 'covidStatus', 'restrictionLevel']]
                                 exportFile = 'APLData_'
-                                dfFinal.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
-                                
-                                dfTrajTrips = dfTrajTrips.rename(columns = {'uid': 'idFile', 'timestamp':'datetime', 'lng':'lon'})
-                                dfTrajTrips = dfTrajTrips[['idFile', 'idWeek', 'idTrip', 'datetime','lat', 'lon', 'covidStatus']]
-                                exportFile = 'TrajectoryTripsData_'
-                                dfTrajTrips.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
-                                
-                                dfFinalSummary = dfFinalSummary[['idFile', 'idWeek', 'idTrip', 'tripTimeMin', 'tripLenKm', 'GPSPoints', 'APLs', 'clusters', 'covidStatus']]
-                                exportFile = 'TrajectoryTripsSummaryData_'
-                                dfFinalSummary.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
-                                
+                                dfAPL.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
                                 # =============================================================================
-                                # ANONYMISATION
+                                # CLUSTER ANONYMISATION
                                 # Data Anonymisation is based on Clusters identification
                                 # Most Visited Place (MVP) is Cluster 0
-                                # Anonimyzation consist to MVP to the center of the world (0,0)
-                                # subtracting the mean of latitudes and longitudes of Cluster 0 to all dataset
+                                # Anonimyzation consist to translate MVP to the center of the world (0,0)
                                 # =============================================================================
-                                dfReferencePoint = dfFinal[dfFinal['cluster']==0]
-                                lonForAnonymization = dfReferencePoint['lon'].mean()
-                                latForAnonymization = dfReferencePoint['lat'].mean()
+                                # Cluster point
+                                dfReferencePoint = dfAPL[dfAPL['cluster']==0]
+                                lonClusterAnonymization = dfReferencePoint['lon'].mean()
+                                latClusterAnonymization = dfReferencePoint['lat'].mean()
                                 # Anonymise APL Dataframe
-                                dfFinal['lon'] = dfFinal['lon'] - lonForAnonymization
-                                dfFinal['lat'] = dfFinal['lat'] - latForAnonymization
-                                # Anonymise TrajectoryTrips Dataframe
-                                dfTrajTrips['lon'] = dfTrajTrips['lon'] - lonForAnonymization
-                                dfTrajTrips['lat'] = dfTrajTrips['lat'] - latForAnonymization
-                                
+                                dfAPL['lon'] = dfAPL['lon'] - lonClusterAnonymization
+                                dfAPL['lat'] = dfAPL['lat'] - latClusterAnonymization
                                 # =============================================================================
                                 # Export Data after Anonymisation
                                 # =============================================================================
                                 exportFile = 'APLData'
-                                dfFinal.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
-                                
-                                exportFile = 'TrajectoryTripsData'
-                                dfTrajTrips.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
-                                
-                                exportFile = 'TrajectoryTripsSummaryData'
-                                dfFinalSummary.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
-                                msg = "Computation succed!! {} contains {} APL".format(csvFileName, len(dfFinal))
+                                dfAPL.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
+                                # =============================================================================
+                                # Export Summary Data
+                                # =============================================================================
+                                dfSummary = dfSummary[['idFile', 'idWeek', 'idTrip', 'GPSPoints', 'APLs', 'clusters', 'covidStatus', 'restrictionLevel']]
+                                exportFile = 'SummaryData'
+                                dfSummary.to_csv(urlDataFinal + exportFile + '.csv', header=True, index = False)
+                                msg = "Computation succed!! {} contains {} APL".format(csvFileName, len(dfAPL))
                                 print(msg)
                                 logging.info(msg)
                             else:
