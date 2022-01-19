@@ -35,7 +35,9 @@ Pre-requisites in case you want to run the script separately:
 ## How to cite this project
 
 Moncayo-Unda, Milton Giovanny (2021): GPS Tracking Data. figshare. Dataset. [https://doi.org/10.6084/m9.figshare.16727005.v3] (https://doi.org/10.6084/m9.figshare.16727005.v3)
+
 Moncayo-Unda, Milton Giovanny (2021): APL Data. figshare. Dataset. [https://doi.org/10.6084/m9.figshare.16727014.v2] (https://doi.org/10.6084/m9.figshare.16727014.v2)
+
 Moncayo-Unda, Milton Giovanny (2021): Summary Data. figshare. Dataset. [https://doi.org/10.6084/m9.figshare.16727011.v4] (https://doi.org/10.6084/m9.figshare.16727011.v4)
 
 ## Having trouble?
