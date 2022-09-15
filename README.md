@@ -1,5 +1,7 @@
 # Welcome to AnLoCOV Project
 
+Anonymised Longitudinal COVID dataset
+
 GPS data collection using mobile devices is of particular interest. This data provides detailed information on people's daily movements due to devices' ubiquity and daily use. 
 
 This project contain scripts to compute Activity Point Location (APL) from mobile devices' GPS tracking. We use Google Location History (GLH), which is accessible on the Google Maps application through the “Your Timeline” option to get GPS tracking data. GLH is available on all mobile devices around the world with the Google Maps application installed. 
@@ -34,11 +36,7 @@ Pre-requisites in case you want to run the script separately:
 
 ## How to cite this project
 
-Moncayo-Unda, Milton Giovanny (2021): GPS Tracking Data. figshare. Dataset. [https://doi.org/10.6084/m9.figshare.16727005.v3](https://doi.org/10.6084/m9.figshare.16727005.v3)
-
-Moncayo-Unda, Milton Giovanny (2021): APL Data. figshare. Dataset. [https://doi.org/10.6084/m9.figshare.16727014.v2](https://doi.org/10.6084/m9.figshare.16727014.v2)
-
-Moncayo-Unda, Milton Giovanny (2021): Summary Data. figshare. Dataset. [https://doi.org/10.6084/m9.figshare.16727011.v4](https://doi.org/10.6084/m9.figshare.16727011.v4)
+Moncayo Unda, Milton Giovanny; Van Droogenbroeck, Marc; Saadi, Ismaïl; Cools, Mario (2022), “AnLoCOV”, Mendeley Data, V2, [doi: 10.17632/vk77k9gvg3.2](https://doi.org/10.17632/vk77k9gvg3.2)
 
 ## Having trouble?
 
